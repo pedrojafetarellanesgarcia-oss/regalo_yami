@@ -13,7 +13,7 @@
 
         body {
             background: linear-gradient(135deg, #ffe5ec, #ffc2d1);
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,7 +22,6 @@
             position: relative;
         }
 
-        /* --- PANTALLA DE ENTRADA EN CELULARES --- */
         #pantallaInicio {
             position: fixed;
             top: 0;
@@ -37,6 +36,13 @@
             align-items: center;
             text-align: center;
             padding: 20px;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #pantallaInicio.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         .btn-abrir-sorpresa {
@@ -58,7 +64,6 @@
             50% { transform: scale(1.05); }
         }
 
-        /* --- CONTENEDOR DE LA TARJETA PRINCIPAL --- */
         .card {
             background: white;
             padding: 20px;
@@ -71,6 +76,8 @@
             z-index: 200;
             position: relative;
             display: block;
+            opacity: 1;
+            transition: transform 0.5s ease, opacity 0.5s ease;
         }
 
         .cake-stage {
@@ -143,7 +150,6 @@
             margin-bottom: 5px;
         }
 
-        /* --- GLOBOS Y PÉTALOS NATIVOS POR CAPA --- */
         .balloon-element {
             position: absolute;
             bottom: -80px;
@@ -171,17 +177,15 @@
             0%, 100% { transform: scale(1); opacity: 0.9; }
             50% { transform: scale(1.15) translateY(-1px); opacity: 1; }
         }
+
         .flame-node {
             animation: flameFlicker 0.5s infinite alternate;
         }
     </style>
 </head>
 <body>
+    <audio id="musicaSorpresa" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
 
-    <!-- AUDIO DE LAS MAÑANITAS DE CEPILLÍN -->
-    <audio id="musicaSorpresa" src="https://archive.org" preload="auto" loop></audio>
-
-    <!-- PANTALLA BONITA DE BIENVENIDA -->
     <div id="pantallaInicio">
         <svg width="100" height="110" viewBox="0 0 100 110" style="margin-bottom: 10px;">
             <ellipse cx="45" cy="80" rx="15" ry="20" fill="white" stroke="black" stroke-width="3"/>
@@ -194,10 +198,9 @@
         <button class="btn-abrir-sorpresa" onclick="entrarTarjeta()">👉 Ver Sorpresa 🌟</button>
     </div>
 
-    <!-- TARJETA ABIERTA PRINCIPAL -->
     <div class="card" id="birthdayCard">
         <h2 style="color: #ff477e; margin-bottom: 10px;">¡Feliz Cumpleaños Yami!</h2>
-        
+
         <div class="cake-stage">
             <svg width="130" height="130" viewBox="0 0 120 120">
                 <rect x="25" y="85" width="70" height="8" fill="#bdc3c7" rx="3"/>
@@ -256,3 +259,34 @@
                 </svg>
             </div>
         </div>
+
+        <div class="message-board">
+            Que este nuevo año te traiga mucha alegría, amor y sueños cumplidos.<br>
+            Gracias por ser tan especial. Te quiero mucho ❤️
+        </div>
+    </div>
+
+    <script>
+        function entrarTarjeta() {
+            const pantalla = document.getElementById('pantallaInicio');
+            const tarjeta = document.getElementById('birthdayCard');
+            const audio = document.getElementById('musicaSorpresa');
+
+            if (pantalla) {
+                pantalla.classList.add('hidden');
+            }
+
+            if (tarjeta) {
+                tarjeta.style.transform = 'scale(1)';
+            }
+
+            if (audio) {
+                audio.volume = 0.45;
+                audio.play().catch(() => {
+                    console.log('Audio bloqueado hasta la interacción del usuario.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
